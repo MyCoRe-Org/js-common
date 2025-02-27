@@ -1,0 +1,20 @@
+{
+  "name": "@mycore-test/js-common",
+  "version": "0.1.26",
+  "exports": {
+    "./i18n": "./src/i18n/index.ts",
+    "./access-key": "./src/access-key/index.ts",
+    "./auth": "./src/auth/index.ts",
+    "./orcid": "./src/orcid/index.ts",
+    "./utils/cache": "./src/utils/cache/index.ts",
+    "./utils/errors": "./src/utils/errors/index.ts",
+    "./utils/http": "./src/utils/http/index.ts"
+  },
+  "publish": {
+    "include": [
+      "src/**/*.ts",
+      "README.md"
+    ]
+  }
+}
+
