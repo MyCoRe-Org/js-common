@@ -17,7 +17,7 @@
  */
 
 import { AuthStrategy } from '../auth/types.ts';
-import { handleError } from '../utils/http/index.ts';
+import { handleError, ensureOk } from '../utils/http';
 import { OrcidUserSettings, OrcidUserStatus } from './types.ts';
 
 /**
@@ -47,6 +47,7 @@ export class OrcidUserService {
    * @throws An error if the request fails or the status cannot be retrieved.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to get user status.
+   * @throws {Error} If an unknown error occurred.
    */
   public getUserStatus = async (): Promise<OrcidUserStatus> => {
     try {
@@ -56,12 +57,10 @@ export class OrcidUserService {
           Accept: 'application/json',
         },
       });
-      if (!response.ok) {
-        handleError(response);
-      }
+      ensureOk(response);
       return (await response.json()) as OrcidUserStatus;
-    } catch {
-      throw new Error('Failed to fetch Orcid user status');
+    } catch (error) {
+      throw handleError(error, 'Failed to fetch Orcid user status');
     }
   };
 
@@ -71,6 +70,7 @@ export class OrcidUserService {
    * @returns A promise that resolves when the authentication is successfully revoked.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to revoke ORCID.
+   * @throws {Error} If an unknown error occurred.
    */
   public revokeAuth = async (orcid: string): Promise<void> => {
     try {
@@ -80,11 +80,9 @@ export class OrcidUserService {
           ...this.getAuthHeaders(),
         },
       });
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error('Failed to revoke ORCID');
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(error, 'Failed to revoke ORCID');
     }
   };
 
@@ -96,6 +94,7 @@ export class OrcidUserService {
    * @throws An error if the request fails or the settings cannot be retrieved.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to get user settings.
+   * @throws {Error} If an unknown error occurred.
    */
   public getUserSettings = async (
     orcid: string
@@ -107,12 +106,13 @@ export class OrcidUserService {
           Accept: 'application/json',
         },
       });
-      if (!response.ok) {
-        handleError(response);
-      }
+      ensureOk(response);
       return (await response.json()) as OrcidUserSettings;
-    } catch {
-      throw new Error(`Failed to fetch ORCID user settings for ${orcid}.`);
+    } catch (error) {
+      throw handleError(
+        error,
+        `Failed to fetch ORCID user settings for ${orcid}.`
+      );
     }
   };
 
@@ -125,6 +125,7 @@ export class OrcidUserService {
    * @throws An error if the request fails or the settings cannot be updated.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to update user settings.
+   * @throws {Error} If an unknown error occurred.
    */
   public updateUserSettings = async (
     orcid: string,
@@ -139,11 +140,12 @@ export class OrcidUserService {
         },
         body: JSON.stringify(settings),
       });
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error(`Failed to update ORCID user settings for ${orcid}.`);
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(
+        error,
+        `Failed to update ORCID user settings for ${orcid}.`
+      );
     }
   };
 

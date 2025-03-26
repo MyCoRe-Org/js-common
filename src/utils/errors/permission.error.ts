@@ -21,16 +21,14 @@
  * to perform an action.
  */
 export class PermissionError extends Error {
-  public details: string;
-
   /**
    * Creates an instance of PermissionError.
    * @param message - The error message that describes the issue.
    * @param details - Additional details about the error (e.g., reason why permissions are missing).
    */
   constructor(
-    message: string = 'User does not have the necessary permissions.',
-    details: string = ''
+    public message: string = 'User does not have the necessary permissions.',
+    public details: string = ''
   ) {
     super(message);
     this.name = 'PermissionError';

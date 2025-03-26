@@ -17,23 +17,18 @@
  */
 
 /**
- * Represents an error that occurs when an unauthorized action is attempted.
+ * Represents an HTTP error with a status code and status text.
  */
-export class UnauthorizedActionError extends Error {
-  public action: string;
-
+export class HttpError extends Error {
   /**
-   * Creates an instance of UnauthorizedActionError.
-   * @param message - The error message that describes the issue.
-   * @param action - The name or description of the unauthorized action attempted.
+   * Creates a new instance of HttpError.
+   * @param status - The HTTP status code (e.g., 404, 500).
+   * @param statusText - The status description (e.g., "Not Found", "Internal Server Error").
    */
   constructor(
-    message: string = 'Unauthorized action attempted.',
-    action: string = ''
+    public status: number,
+    public statusText: string
   ) {
-    super(message);
-    this.name = 'UnauthorizedActionError';
-    this.action = action;
-    Object.setPrototypeOf(this, new.target.prototype);
+    super(`${String(status)} ${statusText}`);
   }
 }

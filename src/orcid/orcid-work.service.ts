@@ -17,7 +17,7 @@
  */
 
 import { AuthStrategy } from '../auth';
-import { handleError } from '../utils/http';
+import { handleError, ensureOk } from '../utils/http';
 import { OrcidWorkStatus } from './types';
 
 /**
@@ -53,6 +53,7 @@ export class OrcidWorkService {
    * @returns A promise that resolves to an `OrcidWorkStatusDto` object containing the status of the work
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to get work status.
+   * @throws {Error} If an unknown error occurred.
    */
   public getWorkStatus = async (
     orcid: string,
@@ -68,12 +69,10 @@ export class OrcidWorkService {
           },
         }
       );
-      if (!response.ok) {
-        handleError(response);
-      }
+      ensureOk(response);
       return (await response.json()) as OrcidWorkStatus;
-    } catch {
-      throw new Error(`Failed to fetch work status for ${objectId}.`);
+    } catch (error) {
+      throw handleError(error, `Failed to fetch work status for ${objectId}.`);
     }
   };
 
@@ -86,6 +85,7 @@ export class OrcidWorkService {
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to export object.
    * @throws {ResourceNotFoundError} If the object does not exist.
+   * @throws {Error} If an unknown error occurred.
    */
   public exportObject = async (
     orcid: string,
@@ -98,11 +98,9 @@ export class OrcidWorkService {
           method: 'POST',
         }
       );
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error(`Failed to export ${objectId} to ${orcid}.`);
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(error, `Failed to export ${objectId} to ${orcid}.`);
     }
   };
 

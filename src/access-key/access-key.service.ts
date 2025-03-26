@@ -17,7 +17,7 @@
  */
 
 import { AuthStrategy } from '../auth';
-import { handleError } from '../utils/http';
+import { handleError, ensureOk } from '../utils/http';
 import {
   AccessKey,
   CreateAccessKey,
@@ -51,6 +51,23 @@ export interface GetAccessKeysOptions {
   limit?: number;
 }
 
+const buildSearchParams = (options?: GetAccessKeysOptions): string => {
+  const searchParams = new URLSearchParams();
+  if (options?.reference) {
+    searchParams.set('reference', options.reference);
+  }
+  if (options?.permissions?.length) {
+    searchParams.set('permissions', options.permissions.join(','));
+  }
+  if (options?.offset) {
+    searchParams.set('offset', String(options.offset));
+  }
+  if (options?.limit) {
+    searchParams.set('limit', String(options.limit));
+  }
+  return searchParams.toString();
+};
+
 /**
  * Base path for access key resource endpoint.
  */
@@ -76,40 +93,29 @@ export class AccessKeyService {
    * @returns A promise that resolves with the access keys information.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to request access keys.
+   * @throws {Error} If an unknown error occurred.
    */
   public async getAccessKeys(
     options?: GetAccessKeysOptions
   ): Promise<AccessKeysSummary> {
-    const searchParams = new URLSearchParams();
-    if (options?.reference) {
-      searchParams.set('reference', options.reference);
-    }
-    if (options?.permissions && options.permissions.length > 0) {
-      searchParams.set('permissions', options.permissions.join(','));
-    }
-    if (options?.offset) {
-      searchParams.set('offset', String(options.offset));
-    }
-    if (options?.limit) {
-      searchParams.set('limit', String(options.limit));
-    }
     try {
-      const response = await fetch(this.getUrl(`?${searchParams.toString()}`), {
-        headers: {
-          ...this.getAuthHeaders(),
-          Accept: 'application/json',
-        },
-      });
-      if (!response.ok) {
-        handleError(response);
-      }
+      const response = await fetch(
+        this.getUrl(`?${buildSearchParams(options)}`),
+        {
+          headers: {
+            ...this.getAuthHeaders(),
+            Accept: 'application/json',
+          },
+        }
+      );
+      ensureOk(response);
       const totalCount = response.headers.get('x-total-count');
       return {
         accessKeys: (await response.json()) as AccessKey[],
         totalCount: totalCount ? parseInt(totalCount, 10) : 0,
       } as AccessKeysSummary;
-    } catch {
-      throw new Error('Failed to get access keys');
+    } catch (error) {
+      throw handleError(error, 'Failed to get access keys');
     }
   }
 
@@ -120,6 +126,7 @@ export class AccessKeyService {
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to request access keys.
    * @throws {ResourceNotFoundError} If the access key does not exist.
+   * @throws {Error} If an unknown error occurred.
    */
   public async getAccessKey(id: string): Promise<AccessKey> {
     try {
@@ -129,12 +136,10 @@ export class AccessKeyService {
           Accept: 'application/json',
         },
       });
-      if (!response.ok) {
-        handleError(response);
-      }
+      ensureOk(response);
       return (await response.json()) as AccessKey;
-    } catch {
-      throw new Error('Failed to get access key');
+    } catch (error) {
+      throw handleError(error, 'Failed to get access key');
     }
   }
 
@@ -144,6 +149,7 @@ export class AccessKeyService {
    * @returns A promise that resolves with the ID of the created access key.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to create access key.
+   * @throws {Error} If an unknown error occurred.
    */
   public async createAccessKey(accessKey: CreateAccessKey): Promise<string> {
     try {
@@ -155,12 +161,10 @@ export class AccessKeyService {
         },
         body: JSON.stringify(accessKey),
       });
-      if (!response.ok) {
-        handleError(response);
-      }
+      ensureOk(response);
       return response.headers.get('location')?.split('/').pop() as string;
-    } catch {
-      throw new Error('Failed to create access key');
+    } catch (error) {
+      throw handleError(error, 'Failed to create access key');
     }
   }
 
@@ -171,6 +175,7 @@ export class AccessKeyService {
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to update access key.
    * @throws {ResourceNotFoundError} If the access key does not exist.
+   * @throws {Error} If an unknown error occurred.
    */
   public async updateAccessKey(
     id: string,
@@ -185,11 +190,9 @@ export class AccessKeyService {
         },
         body: JSON.stringify(accessKey),
       });
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error('Failed to update access key');
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(error, 'Failed to update access key');
     }
   }
 
@@ -200,6 +203,7 @@ export class AccessKeyService {
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to update access key.
    * @throws {ResourceNotFoundError} If the access key does not exist.
+   * @throws {Error} If an unknown error occurred.
    */
   public async patchAccessKey(
     id: string,
@@ -214,11 +218,9 @@ export class AccessKeyService {
         },
         body: JSON.stringify(accessKey),
       });
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error('Failed to update access key');
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(error, 'Failed to update access key');
     }
   }
 
@@ -228,6 +230,7 @@ export class AccessKeyService {
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to delete access key.
    * @throws {ResourceNotFoundError} If the access key does not exist.
+   * @throws {Error} If an unknown error occurred.
    */
   public async deleteAccessKey(id: string): Promise<void> {
     try {
@@ -237,11 +240,9 @@ export class AccessKeyService {
           ...this.getAuthHeaders(),
         },
       });
-      if (!response.ok) {
-        handleError(response);
-      }
-    } catch {
-      throw new Error('Failed to delete access key');
+      ensureOk(response);
+    } catch (error) {
+      throw handleError(error, 'Failed to delete access key');
     }
   }
 
