@@ -1,6 +1,6 @@
 {
-  "name": "@mycore-test/js-common",
-  "version": "0.1.29",
+  "name": "@mycore/js-common",
+  "version": "0.0.1",
   "exports": {
     "./i18n": "./src/i18n/index.ts",
     "./access-key": "./src/access-key/index.ts",
