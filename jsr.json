@@ -13,7 +13,8 @@
   "publish": {
     "include": [
       "src/**/*.ts",
-      "README.md"
+      "README.md",
+      "LICENSE.txt"
     ]
   }
 }
