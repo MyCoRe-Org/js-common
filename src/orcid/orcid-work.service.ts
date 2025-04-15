@@ -78,8 +78,10 @@ export class OrcidWorkService {
       const response = await fetch(
         this.getUrl(`member/${orcid}/works/object/${objectId}`),
         {
-          ...this.getAuthHeaders(),
           method: 'POST',
+          headers: {
+            ...this.getAuthHeaders(),
+          },
         }
       );
       ensureOk(response);
