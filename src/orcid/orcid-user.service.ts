@@ -56,12 +56,15 @@ export class OrcidUserService {
    */
   public revokeAuth = async (orcid: string): Promise<void> => {
     try {
-      const response = await fetch(`rsc/orcid/oauth/${orcid}`, {
-        method: 'DELETE',
-        headers: {
-          ...this.getAuthHeaders(),
-        },
-      });
+      const response = await fetch(
+        new URL(`rsc/orcid/oauth/${orcid}`, this.baseUrl),
+        {
+          method: 'DELETE',
+          headers: {
+            ...this.getAuthHeaders(),
+          },
+        }
+      );
       ensureOk(response);
     } catch (error) {
       throw handleError(error, 'Failed to revoke ORCID');
