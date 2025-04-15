@@ -1,0 +1,20 @@
+name: Publish to jsr and create GitHub release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: npx jsr publish
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+
