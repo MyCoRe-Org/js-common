@@ -21,7 +21,7 @@ export class OrcidWorkService {
    */
   constructor(
     private baseUrl: string | URL,
-    private authStrategy?: () => AuthStrategy
+    private authStrategy?: AuthStrategy
   ) {}
 
   /**
@@ -47,7 +47,7 @@ export class OrcidWorkService {
         this.getUrl(`${mode}/${orcid}/works/object/${objectId}`),
         {
           headers: {
-            ...this.getAuthHeaders(),
+            ...(await this.getAuthHeaders()),
             Accept: 'application/json',
           },
         }
@@ -80,7 +80,7 @@ export class OrcidWorkService {
         {
           method: 'POST',
           headers: {
-            ...this.getAuthHeaders(),
+            ...(await this.getAuthHeaders()),
           },
         }
       );
@@ -99,7 +99,7 @@ export class OrcidWorkService {
     return new URL(path ? `${API_PATH}/${path}` : API_PATH, this.baseUrl);
   }
 
-  private getAuthHeaders(): Record<string, string> {
-    return this.authStrategy?.() ? this.authStrategy().getHeaders() : {};
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    return this.authStrategy ? await this.authStrategy.getHeaders() : {};
   }
 }

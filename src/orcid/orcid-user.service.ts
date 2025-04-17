@@ -18,7 +18,7 @@ export class OrcidUserService {
    */
   constructor(
     private baseUrl: string | URL,
-    private authStrategy?: () => AuthStrategy
+    private authStrategy?: AuthStrategy
   ) {}
 
   /**
@@ -35,7 +35,7 @@ export class OrcidUserService {
     try {
       const response = await fetch(this.getUrl('user-status'), {
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           Accept: 'application/json',
         },
       });
@@ -61,7 +61,7 @@ export class OrcidUserService {
         {
           method: 'DELETE',
           headers: {
-            ...this.getAuthHeaders(),
+            ...(await this.getAuthHeaders()),
           },
         }
       );
@@ -87,7 +87,7 @@ export class OrcidUserService {
     try {
       const response = await fetch(this.getUrl(`user-properties/${orcid}`), {
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           Accept: 'application/json',
         },
       });
@@ -120,7 +120,7 @@ export class OrcidUserService {
       const response = await fetch(this.getUrl(`user-properties/${orcid}`), {
         method: 'PUT',
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(settings),
@@ -143,7 +143,7 @@ export class OrcidUserService {
     return new URL(path ? `${API_PATH}/${path}` : API_PATH, this.baseUrl);
   }
 
-  private getAuthHeaders(): Record<string, string> {
-    return this.authStrategy?.() ? this.authStrategy().getHeaders() : {};
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    return this.authStrategy ? await this.authStrategy.getHeaders() : {};
   }
 }

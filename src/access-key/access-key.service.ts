@@ -66,7 +66,7 @@ export class AccessKeyService {
    */
   constructor(
     private baseUrl: string | URL,
-    private authStrategy?: () => AuthStrategy
+    private authStrategy?: AuthStrategy
   ) {}
 
   /**
@@ -85,7 +85,7 @@ export class AccessKeyService {
         this.getUrl(`?${buildSearchParams(options)}`),
         {
           headers: {
-            ...this.getAuthHeaders(),
+            ...(await this.getAuthHeaders()),
             Accept: 'application/json',
           },
         }
@@ -114,7 +114,7 @@ export class AccessKeyService {
     try {
       const response = await fetch(this.getUrl(id), {
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           Accept: 'application/json',
         },
       });
@@ -138,7 +138,7 @@ export class AccessKeyService {
       const response = await fetch(this.getUrl(), {
         method: 'POST',
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(accessKey),
@@ -167,7 +167,7 @@ export class AccessKeyService {
       const response = await fetch(this.getUrl(id), {
         method: 'PUT',
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(accessKey),
@@ -195,7 +195,7 @@ export class AccessKeyService {
       const response = await fetch(this.getUrl(id), {
         method: 'PATCH',
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(accessKey),
@@ -219,7 +219,7 @@ export class AccessKeyService {
       const response = await fetch(this.getUrl(id), {
         method: 'DELETE',
         headers: {
-          ...this.getAuthHeaders(),
+          ...(await this.getAuthHeaders()),
         },
       });
       ensureOk(response);
@@ -237,7 +237,7 @@ export class AccessKeyService {
     return new URL(path ? `${API_PATH}/${path}` : API_PATH, this.baseUrl);
   }
 
-  private getAuthHeaders(): Record<string, string> {
-    return this.authStrategy?.() ? this.authStrategy().getHeaders() : {};
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    return this.authStrategy ? await this.authStrategy.getHeaders() : {};
   }
 }

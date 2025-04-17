@@ -6,5 +6,5 @@ export interface AuthStrategy {
    * Returns a record of headers required for authentication.
    * @returns A record of headers that will be sent with the request, such as an Authorization header.
    */
-  getHeaders(): Record<string, string>;
+  getHeaders(): Promise<Record<string, string>>;
 }

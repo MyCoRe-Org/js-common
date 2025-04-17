@@ -5,31 +5,20 @@ import { AuthStrategy } from './types';
  * This strategy will include a Bearer token in the Authorization header.
  */
 export class AccessTokenAuthStrategy implements AuthStrategy {
-  private readonly accessToken;
-
   /**
    * Creates an instance of the `AccessTokenClientAuthStrategy` class with the given access token.
    * @param accessToken - The access token to be used for authentication.
    */
-  constructor(accessToken: string) {
-    this.accessToken = accessToken;
-  }
+  constructor(public accessToken: string) {}
 
   /**
    * Returns the authentication headers, including the Bearer token.
    * @returns A record containing the Authorization header with the Bearer token.
    */
-  public getHeaders(): Record<string, string> {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  public async getHeaders(): Promise<Record<string, string>> {
     return {
       Authorization: `Bearer ${this.accessToken}`,
     };
-  }
-
-  /**
-   * Getter for the access token.
-   * @returns The access token.
-   */
-  public getAccessToken(): string {
-    return this.accessToken;
   }
 }
