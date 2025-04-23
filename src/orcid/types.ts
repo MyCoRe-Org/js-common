@@ -5,22 +5,22 @@ export interface OrcidUserSettings {
   /**
    * Indicates whether the system should always update the user's works in ORCID profile.
    */
-  isAlwaysUpdateWork: boolean | null;
+  alwaysUpdateWork: boolean | null;
 
   /**
    * Indicates whether the system should allow the creation of duplicate works in ORCID profile.
    */
-  isCreateDuplicateWork: boolean | null;
+  createDuplicateWork: boolean | null;
 
   /**
    * Indicates whether the system should allow the creation of the user's first work in ORCID  profile.
    */
-  isCreateFirstWork: boolean | null;
+  createFirstWork: boolean | null;
 
   /**
    * Indicates whether the system should recreate deleted works in ORCID.
    */
-  isRecreateDeletedWork: boolean | null;
+  recreateDeletedWork: boolean | null;
 }
 
 /**
