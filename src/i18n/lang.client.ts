@@ -4,11 +4,11 @@
 const API_PATH = 'rsc/locale';
 
 /**
- * Service for handling language-related operations.
+ * Client for handling language-related operations.
  */
-export class LangService {
+export class LangApiClient {
   /**
-   * Creates an instance of `LangService`.
+   * Creates an instance of `LangApiClient`.
    * @param baseUrl - The base URL or URL object.
    */
   constructor(private baseUrl: string | URL) {

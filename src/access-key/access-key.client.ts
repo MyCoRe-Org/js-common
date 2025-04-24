@@ -56,11 +56,11 @@ const buildSearchParams = (options?: GetAccessKeysOptions): string => {
 const API_PATH = 'api/v2/access-keys';
 
 /**
- * Service for managing access keys.
+ * Client for managing access keys.
  */
-export class AccessKeyService {
+export class AccessKeyApiClient {
   /**
-   * Creates an instance of `AccessKeyService`.
+   * Creates an instance of `AccessKeyApiClient`.
    * @param baseUrl - The base Url to make requests.
    * @param authStrategy - Optional authentication strategy function.
    */

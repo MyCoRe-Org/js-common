@@ -1,5 +1,5 @@
 import { AuthStrategy } from '../auth/types.ts';
-import { handleError, ensureOk } from '../utils/http';
+import { handleError, ensureOk } from '../utils/http/index.ts';
 import { OrcidUserSettings, OrcidUserStatus } from './types.ts';
 
 /**
@@ -8,11 +8,11 @@ import { OrcidUserSettings, OrcidUserStatus } from './types.ts';
 const API_PATH = 'api/orcid/v1/';
 
 /**
- * Service for interacting with ORCID user status and settings.
+ * Client for interacting with ORCID user status and settings.
  */
-export class OrcidUserService {
+export class OrcidUserApiClient {
   /**
-   * Creates an instance of `OrcidUserService`.
+   * Creates an instance of `OrcidUserApiClient`.
    * @param baseUrl - The base Url to make requests.
    * @param authStrategy - Optional authentication strategy function.
    */

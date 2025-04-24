@@ -2,5 +2,5 @@
  * @module accessKey
  */
 
-export * from './access-key.service';
+export * from './access-key.client';
 export * from './types';

@@ -8,14 +8,14 @@ import { OrcidWorkStatus } from './types';
 const API_PATH = 'api/orcid/v1/';
 
 /**
- * A service for interacting with ORCID works, including fetching work status and exporting objects.
+ * A client for interacting with ORCID works, including fetching work status and exporting objects.
  *
- * This service allows you to fetch the status of a work by its `objectId` and ORCID, and to export
+ * This client allows you to fetch the status of a work by its `objectId` and ORCID, and to export
  * works to ORCID. It can operate in both "member" and "public" modes.
  */
-export class OrcidWorkService {
+export class OrcidWorkApiClient {
   /**
-   * Creates an instance of `OrcidWorkService`.
+   * Creates an instance of `OrcidWorkApiClient`.
    * @param baseUrl - The base Url to make requests.
    * @param authStrategy - Optional authentication strategy function.
    */

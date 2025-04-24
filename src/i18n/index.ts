@@ -2,4 +2,4 @@
  * @module i18n
  */
 
-export * from './lang.service';
+export * from './lang.client';
