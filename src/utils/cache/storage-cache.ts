@@ -36,12 +36,19 @@ export abstract class StorageCache<T> implements Cache<T> {
 
   getAllItems(): Record<string, T> {
     const result: Record<string, T> = {};
-    for (let i = 0; i < localStorage.length; i++) {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
       const key = localStorage.key(i);
       if (key) {
-        const value = this.getItem(key);
-        if (value) {
-          result[key] = value;
+        const rawCachedItem = this.storage.getItem(key);
+        if (!rawCachedItem) continue;
+        const cachedItem = JSON.parse(rawCachedItem) as CacheItem<T>;
+        if (
+          cachedItem.expiresAt !== null &&
+          cachedItem.expiresAt < Date.now()
+        ) {
+          localStorage.removeItem(key);
+        } else {
+          result[key] = cachedItem.value;
         }
       }
     }

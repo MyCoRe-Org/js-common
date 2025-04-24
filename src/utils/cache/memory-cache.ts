@@ -36,6 +36,8 @@ export class MemoryCache<T> implements Cache<T> {
     const result: Record<string, T> = {};
     this.map.forEach((item, key) => {
       if (item.expiresAt !== null && item.expiresAt < Date.now()) {
+        this.map.delete(key);
+      } else {
         result[key] = item.value;
       }
     });
