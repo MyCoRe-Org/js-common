@@ -95,7 +95,7 @@ export class AccessKeyApiClient {
       return {
         accessKeys: (await response.json()) as AccessKey[],
         totalCount: totalCount ? parseInt(totalCount, 10) : 0,
-      } as AccessKeysSummary;
+      };
     } catch (error) {
       throw handleError(error, 'Failed to get access keys');
     }
