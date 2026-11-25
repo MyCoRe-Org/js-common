@@ -44,7 +44,7 @@ export class LangApiClient {
    * @param prefix - The prefix for the translation.
    * @param lang - (Optional) The language code for the translations (e.g., 'en', 'de'). If not provided, the default language will be used.
    * @returns A promise that resolves to an object containing key-value pairs for translations.
-   * @throws An error if the response is not successful (non-2xx HTTP status).
+   * @throws {Error} An error if the response is not successful (non-2xx HTTP status).
    */
   public async getTranslations(
     prefix: string,
@@ -62,7 +62,7 @@ export class LangApiClient {
    * @param name - The name or key of the translation (e.g., a specific word or phrase).
    * @param lang - (Optional) The language code for the translation (e.g., 'en', 'de'). If not provided, the default language will be used.
    * @returns A promise that resolves to the translation as a string.
-   * @throws An error if the response is not successful (non-2xx HTTP status).
+   * @throws {Error} An error if the response is not successful (non-2xx HTTP status).
    */
   public async translate(name: string, lang?: string): Promise<string> {
     const response = await fetch(this.getTranslationPath(name, lang));
