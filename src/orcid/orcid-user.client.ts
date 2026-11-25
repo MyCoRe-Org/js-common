@@ -26,7 +26,7 @@ export class OrcidUserApiClient {
    * This method retrieves the status of the ORCID user, such as whether they are connected
    * or if their account has any issues.
    * @returns A `Promise` that resolves to the ORCID user status.
-   * @throws An error if the request fails or the status cannot be retrieved.
+   * @throws {Error} An error if the request fails or the status cannot be retrieved.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to get user status.
    * @throws {Error} If an unknown error occurred.
@@ -76,7 +76,7 @@ export class OrcidUserApiClient {
    * This method retrieves settings for a specific ORCID user, identified by the ORCID identifier.
    * @param orcid - The ORCID identifier of the user whose settings are to be fetched.
    * @returns A `Promise` that resolves to the ORCID user settings.
-   * @throws An error if the request fails or the settings cannot be retrieved.
+   * @throws {Error} An error if the request fails or the settings cannot be retrieved.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to get user settings.
    * @throws {Error} If an unknown error occurred.
@@ -107,7 +107,7 @@ export class OrcidUserApiClient {
    * @param orcid - The ORCID identifier of the user whose settings are to be updated.
    * @param settings - The updated settings to be applied for the ORCID user.
    * @returns A `Promise` that resolves once the settings have been successfully updated.
-   * @throws An error if the request fails or the settings cannot be updated.
+   * @throws {Error} An error if the request fails or the settings cannot be updated.
    * @throws {UnauthorizedActionError} If the user is not authorized.
    * @throws {PermissionError} If the user is not allowed to update user settings.
    * @throws {Error} If an unknown error occurred.

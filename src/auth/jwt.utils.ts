@@ -40,7 +40,7 @@ export interface JwtRequestOptions {
  * @param baseUrl - The base URL to make the JWT request to.
  * @param options - The options containing user and session attributes (optional).
  * @returns A promise that resolves with the JWT access token if the login is successful.
- * @throws An error if the request fails or if the login is unsuccessful.
+ * @throws {Error} An error if the request fails or if the login is unsuccessful.
  */
 export const fetchJwt = async (
   baseUrl: string | URL,
@@ -83,9 +83,12 @@ export const fetchJwt = async (
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(
-        `Failed to fetch JWT from ${baseUrl.toString()}: ${error.message}`
+        `Failed to fetch JWT from ${baseUrl.toString()}: ${error.message}`,
+        { cause: error }
       );
     }
-    throw new Error(`Unknown error occurred while fetching JWT.`);
+    throw new Error(`Unknown error occurred while fetching JWT.`, {
+      cause: error,
+    });
   }
 };
